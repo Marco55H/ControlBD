@@ -26,9 +26,69 @@ public class CrearCrud {
 		sc.close();
 	}
 
+	private static void borrarRegistro() throws ClassNotFoundException, SQLException {
+		int opc2;
+		int id;
+		System.out.println("En que tabla quiere BORRAR (Tendrá que estar creada)");
+		System.out.println(" -------------------------------- ");
+		System.out.println(" 1 -Profesores (También eliminará Matricula)");
+		System.out.println(" 2 -Alumnado (También eliminará Matricula) ");
+		System.out.println(" 3 -Matrícula");
+		opc2 = sc.nextInt();
+		sc.nextLine();
+		switch (opc2) {
+		case 1:			
+			System.out.println("Indique el ID del profesor que quiere borrar");
+			id =sc.nextInt();
+			sc.nextLine();
+			borrarMatricula("idProfesorado", id);
+			borrarRegistro("Profesor", id);
+			break;
+		case 2:
+			System.out.println("Indique el ID del Alumno que quiere borrar");
+			id =sc.nextInt();
+			sc.nextLine();
+			borrarMatricula("idAlumnado", id);
+			borrarRegistro("Alumno", id);
+			break;
+		case 3:
+			System.out.println("Indique el ID del Alumno que quiere borrar");
+			id =sc.nextInt();
+			sc.nextLine();
+			borrarRegistro("Matricula", id);
+			break;
+		}
+	}
+	
+	private static void borrarMatricula(String campo,int id) throws SQLException, ClassNotFoundException {
+	Connection conn = null; 
+    Statement stmt = null;
+    
+    conn = Conectar();
+	System.out.println("Nos hemos conectado a la BBDD");
+
+	stmt = conn.createStatement();
+	
+	stmt.executeUpdate("Delete from Matricula where "+campo+" = '"+id+"'");
+	System.out.println("Eliminado el dato correctamente");
+}
+	
+	private static void borrarRegistro(String tabla, int id) throws SQLException, ClassNotFoundException {
+	Connection conn = null;
+    Statement stmt = null;
+    
+    conn = Conectar();
+	System.out.println("Nos hemos conectado a la BBDD");
+
+	stmt = conn.createStatement();
+	
+	stmt.executeUpdate("Delete from "+tabla+ " where id = '"+id+"'");
+	System.out.println("Eliminado el dato correctamente");
+}
+
 	private static void borrar() throws ClassNotFoundException, SQLException {
 		int opc2;
-		System.out.println("En que tabla quiere BORRAR (Tendrá que estar creada)");
+		System.out.println("Que tabla quiere BORRAR (Tendrá que estar creada)");
 		System.out.println(" -------------------------------- ");
 		System.out.println(" 1 -Profesores (También eliminará Matricula)");
 		System.out.println(" 2 -Alumnado (También eliminará Matricula) ");
@@ -807,6 +867,7 @@ public class CrearCrud {
 			System.out.println("|	2- Listar                |");
 			System.out.println("|	3- Editar                |");
 			System.out.println("|	4- Borrar                |");
+			System.out.println("|	5- Borrar Regisdtros     |");
 			System.out.println("|	9- Crear tabla           |");
 			System.out.println("|	0- Salir                 |");
 			System.out.println(" -------------------------------- ");
@@ -833,6 +894,10 @@ public class CrearCrud {
 
 			case 4:
 				borrar();
+				break;
+			
+			case 5:
+				borrarRegistro();
 				break;
 			}
 
